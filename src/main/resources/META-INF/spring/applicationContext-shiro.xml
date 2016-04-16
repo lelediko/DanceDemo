@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<description>Shiro Configuration</description>
+	<bean id="DanceRealm" class="com.dance4Ever.realm.DanceRealm" />
+	<!-- Shiro cache manager -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+    <bean
+        class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+    
+	<!-- Shiro's main business-tier object for web-enabled applications -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="DanceRealm" />
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+
+		<!-- Shiro Filter -->
+		<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+			<property name="securityManager" ref="securityManager" />
+			<!-- 登陆页为login，所有请求进入此页面 -->
+<!-- 			<property name="loginUrl" value="/login" /> -->
+			<!-- 成功后跳转页面 -->
+			<property name="successUrl" value="/index" />
+			<property name="filterChainDefinitions">
+				<value>
+					/login = anon
+					/logout = logout
+					/resources/image/** = anon
+					
+					<!-- perms[user:query]表示访问此连接需要权限为user:query的用户 -->
+<!-- 					/index=perms[query] -->
+<!-- 					/index=perms[add] -->
+                    <!--roles[manager]表示访问此连接需要用户的角色为manager -->
+<!-- 					/user/add=roles[manager] -->
+<!-- 					/user/del/**=roles[admin] -->
+<!--                         /user/add=roles[admin] -->
+<!--                         /user/query=roles[admin] -->
+<!-- 					/user/edit/**=roles[manager] -->
+<!-- 					/user=roles[normal] -->
+<!--                    /index=roles["admin,normal"] -->
+					<!-- 所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过登录验证,如果未登录则跳到/login -->
+<!-- 					/** = authc -->
+				</value>
+			</property>
+		</bean>
+		
+    
+</beans>
