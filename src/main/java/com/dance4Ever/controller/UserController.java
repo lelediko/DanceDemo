@@ -9,15 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dance4Ever.realm.DanceRealm;
-
 @Controller
 @RequestMapping("/")
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
-	@Resource
-	private DanceRealm danceRealm ;
 	
 	@RequestMapping(value="/login",method=RequestMethod.GET)  
     public String loginForm(Model model){
